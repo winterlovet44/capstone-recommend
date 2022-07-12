@@ -1,0 +1,10 @@
+{% extends "home.html" %}
+{% block title %}Results{% endblock %}
+
+{% block message %}
+    <hr />
+    <h4 class="text-center">Recommendation Result</h4>
+    <p class="text-center"><i>{{query}}</i></p>
+
+{{ data.to_html(classes="table table-striped") | safe}}
+{% endblock %}
