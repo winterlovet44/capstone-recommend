@@ -13,9 +13,9 @@
 ## Project Description<a name="motivation"></a>
 
 In this project, I build a application about movie recommender system with Movielens 1M dataset.
-For more information about the dataset, please check here.
-I use 
-I also implement a simple web-app for perform recommend for an user or an item.
+For more information about the dataset, please check [here](https://grouplens.org/datasets/movielens/1m/).
+I use Alternating Least Square which has been implemented in [implicit](https://github.com/benfred/implicit) for user recommendation and a Content-based module for related item recommendation.
+I also implement a simple web-app for perform recommend for an user or an item (model serving).
 
 This project contains four steps of ML pipeline:
 
@@ -51,22 +51,16 @@ pip install -r requirements.txt
 ## File Descriptions <a name="files"></a>
 
 ```bash
-├── README.md
-├── app
-│   ├── run.py # Flask app
-│   └── templates # Folder contains html file to render web app
-│       ├── go.html
-│       └── master.html
-├── data
-│   ├── DisasterResponse.db # SQLite database file
-│   ├── YourDatabaseName.db
-│   ├── disaster_categories.csv # Raw data
-│   ├── disaster_messages.csv # Raw data
-│   └── process_data.py # ETL pipeline
-├── models
-│   ├── classifier.pkl # Saved model
-│   └── train_classifier.py # Model pipeline
-└── requirements.txt # Package requirement
+├───data  # Contains data after cleaned
+├───models  # Contains pickle file, it will be generate after run model
+├───notebooks  # Contains notebook about explore model and serving model
+├───raw  # Raw data of Movielens 1M
+├───recommend  # Contains some module for recommendation
+├───static  # Flask static folder, contains image and css style
+│   ├───images
+│   └───styles
+├───templates  # Flask html folder, use for render
+└───utils  # Contains some helper function for project
 ```
 
 ## Instructions<a name="results"></a>
@@ -77,22 +71,28 @@ We need to pre-processing for user's dataset and item's dataset.
 To run ETL pipeline for clean user dataset, run the code below:
 
 ```bash
-cd data
-python process_data.py disaster_messages.csv disaster_categories.csv DisasterResponse.db
+python movielens_rating_etl.py
 ```
 
 To run ETL pipeline for clean item's dataset:
 
 ```bash
-cd data
-python process_data.py disaster_messages.csv disaster_categories.csv DisasterResponse.db
+python movielens_meta_etl.py
 ```
 
 2. To build and train model
 
+We have 2 model is ALS and ContentBased. 
+To run ALS model
+
 ```bash
-cd models
-python train_classifier.py ../data/DisasterResponse.db classifier.pkl
+python als.py
+```
+
+To run ContentBased model
+
+```bash
+python cb.py
 ```
 
 3. Run web app
@@ -100,7 +100,6 @@ python train_classifier.py ../data/DisasterResponse.db classifier.pkl
 Run the code below to start the web app at localhost
 
 ```bash
-cd app
 python run.py
 ```
 
