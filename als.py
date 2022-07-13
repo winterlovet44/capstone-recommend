@@ -13,6 +13,17 @@ os.environ["OPENBLAS_NUM_THREADS"] = "1"
 
 
 def load_data(path):
+    """Load rating data to Dataset.
+
+    Parameters
+    ----------
+    path: str
+        Path string to rating data file
+
+    Returns
+    -------
+    Dataset contain data from rating.csv
+    """
     df = pd.read_csv(path, index_col=0)
     return Dataset(df, user="UserID", item="MovieID", rating="Rating")
 
@@ -21,6 +32,7 @@ def load_data(path):
 @click.option('--input_path', default="./data/rating.csv", help='Filepath contains movielens 1M dataset')
 @click.option('--model_path', default="./models/als.pkl", help='Output path to write cleaned metadata')
 def run(input_path, model_path):
+    """Main function to train and save ALS model."""
     print(f"Load data from {input_path}\n")
     ds = load_data(input_path)
     print("Initialize model...\n")

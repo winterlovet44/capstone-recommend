@@ -1,8 +1,7 @@
 import click
 import pandas as pd
 from utils.util import ensure_type_path
-
-COLUMNS = ['UserID', "MovieID", "Rating"]
+from utils.variables import COLUMNS, RAW_RATING_FILE, RATING
 
 
 def load_data(path):
@@ -31,12 +30,12 @@ def load_data(path):
 
 
 @click.command()
-@click.option('--input_path', help='Filepath contains user\
+@click.option('--input_path', default=RAW_RATING_FILE, help='Filepath contains user\
                                 rating of movielens 1M dataset')
-@click.option('--write_to', default="data/rating.csv", help='Output path\
+@click.option('--write_to', default=RATING, help='Output path\
                                 to write cleaned metadata')
 def run(input_path, write_to):
-    """Main function to run ETL of rating data."""
+    """Main function to run ETL for ratings.dat file."""
     print("Load raw data...\n")
     df = load_data(input_path)
     df = df[COLUMNS]

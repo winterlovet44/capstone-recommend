@@ -4,6 +4,7 @@ import pandas as pd
 
 from recommend.contentbase import ContentBased
 from utils.util import save_model
+from utils.variables import METADATA, CB_MODEL_PATH
 
 # import numpy as np
 # from sqlalchemy import create_engine
@@ -46,13 +47,18 @@ def save_model(model, path):
 
 
 @click.command()
-@click.option('--input_path', default="data/metadata.json", help='Filepath contains movielens 1M dataset')
-@click.option('--model_path', default="models/cb.pkl", help='Output path to write cleaned metadata')
+@click.option('--input_path', default=METADATA, help='Filepath contains movielens 1M dataset')
+@click.option('--model_path', default=CB_MODEL_PATH, help='Output path to write cleaned metadata')
 # @click.option('--model_name', default="cb", help='Output path to write cleaned metadata')
 def run(input_path, model_path):
+    print("Load metadata...")
     df = load_meta(input_path)
+    print("Initialize model and train...")
     model = content_based_train(df)
+    print("Save model...")
+    print(f"Save model to {model_path}")
     save_model(model, model_path)
+    print("done!!!")
 
 
 if __name__ == '__main__':

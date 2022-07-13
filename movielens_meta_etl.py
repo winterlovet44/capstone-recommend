@@ -3,13 +3,25 @@ import pandas as pd
 from sklearn.preprocessing import MultiLabelBinarizer
 from sqlalchemy import create_engine
 from utils.util import ensure_type_path
+from utils.variables import DATABASE, TABLE, METADATA, RAW_META_FILE
 
 
-DBNAME = "data/metadata"
-FILEPATH = "data/metadata.json"
+
+# FILEPATH = "data/metadata.json"
 
 
 def load_meta(path):
+    """Load and normalize movielens metadata's schema.
+
+    Parameters
+    ----------
+    path: str
+        Path string to raw movies.dat file
+
+    Returns
+    -------
+    pd.DataFrame contains metdata of movies in movielens dataset.
+    """
     meta = pd.read_csv(path,
                        delimiter="::",
                        encoding="ISO-8859-1",
@@ -20,11 +32,11 @@ def load_meta(path):
     return meta
 
 
-def nested_category_encode(data):
-    mlb = MultiLabelBinarizer()
-    res = pd.DataFrame(mlb.fit_transform(data.Genres),
-                       columns=mlb.classes_,
-                       index=data.index)
+# def nested_category_encode(data):
+#     mlb = MultiLabelBinarizer()
+#     res = pd.DataFrame(mlb.fit_transform(data.Genres),
+#                        columns=mlb.classes_,
+#                        index=data.index)
 
 
 # def ensure_csv_path(path):
@@ -34,10 +46,11 @@ def nested_category_encode(data):
 
 
 @click.command()
-@click.option('--input_path', default="raw/movies.dat", help='Filepath contains movielens 1M dataset')
-@click.option('--filename', default=FILEPATH, help='Output path to write cleaned metadata')
-@click.option('--tablename', default=None, help='Output path to write cleaned metadata')
+@click.option('--input_path', default=RAW_META_FILE, help='Filepath contains movielens 1M dataset')
+@click.option('--filename', default=METADATA, help='Output path to write cleaned metadata')
+@click.option('--tablename', default=TABLE, help='Output path to write cleaned metadata')
 def run(input_path, filename, tablename):
+    """Process and save metadata of movielens 1M."""
     print("Load raw data...\n")
     meta = load_meta(input_path)
     print("Extract release from title of movie...\n")
@@ -53,8 +66,8 @@ def run(input_path, filename, tablename):
         print(f"Write metadata to {filename}\n")
         meta.to_json(write_to, orient='records')
     if tablename:
-        engine = create_engine(f"sqlite:///{DBNAME}")
-        print(f"Write metadata to database file: {DBNAME}")
+        engine = create_engine(f"sqlite:///{DATABASE}")
+        print(f"Write metadata to database file: {DATABASE}")
         print(f"With table name: {tablename}\n")
         meta.to_sql(name=tablename, con=engine, if_exists="replace")
     print("Done!!!")

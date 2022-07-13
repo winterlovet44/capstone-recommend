@@ -4,13 +4,13 @@ import pandas as pd
 
 from flask import Flask
 from flask import render_template, request
-from plotly.graph_objs import Bar
-from sqlalchemy import create_engine
 from utils.util import load_model
-from recommend.contentbase import ContentBased
+from recommend.contentbase import ContentBased  # noqa
 # from recommend.als import AlternatingLeastSquares
 
 from utils.app_utils import load_data, get_res_result
+from utils.util import get_connection_to_meta
+from utils import variables
 
 
 app = Flask(__name__)
@@ -18,13 +18,13 @@ app = Flask(__name__)
 
 # Global variable
 # load data
-engine = create_engine("sqlite:///metadata")
+engine = get_connection_to_meta()
 df = load_data()
-history = load_data("data/rating.csv")
+history = load_data(variables.RATING)
 
 # load model
-als = load_model("models/als.pkl")
-cb = load_model("models/cb.pkl")
+als = load_model(variables.ALS_MODEL_PATH)
+cb = load_model(variables.CB_MODEL_PATH)
 choices = ['als', 'cb']
 
 
