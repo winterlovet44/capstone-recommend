@@ -1,11 +1,12 @@
 import os
 import click
 
-from dataset import Dataset
+from recommend.dataset import Dataset
 import pandas as pd
 
 from implicit.als import AlternatingLeastSquares
 from utils.util import save_model
+from utils.variables import RATING, ALS_MODEL_PATH
 
 
 os.environ["MKL_NUM_THREADS"] = "1"
@@ -29,8 +30,8 @@ def load_data(path):
 
 
 @click.command()
-@click.option('--input_path', default="./data/rating.csv", help='Filepath contains movielens 1M dataset')
-@click.option('--model_path', default="./models/als.pkl", help='Output path to write cleaned metadata')
+@click.option('--input_path', default=RATING, help='Filepath contains movielens 1M dataset')
+@click.option('--model_path', default=ALS_MODEL_PATH, help='Output path to write cleaned metadata')
 def run(input_path, model_path):
     """Main function to train and save ALS model."""
     print(f"Load data from {input_path}\n")
