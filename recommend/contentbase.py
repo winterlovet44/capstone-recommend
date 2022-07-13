@@ -64,7 +64,7 @@ class TfidfEncoder(BaseEncoder):
 
 
 class CategoricalEncoder(BaseEncoder):
-    """Perform categorical data using LabelBinarizer method."""
+    """Perform one-hot encoder for categorical data using LabelBinarizer method."""
 
     def __init__(self, **kwargs):
         self.engine = LabelBinarizer()
@@ -80,7 +80,7 @@ class CategoricalEncoder(BaseEncoder):
 
 
 class ListEncoder(BaseEncoder):
-    """Perform nested list categorical data using
+    """Perform one-hot encoder for nested list categorical data using
     MultiLabelBinarizer method.
 
     """
@@ -99,6 +99,18 @@ class ListEncoder(BaseEncoder):
 
 
 class ContentBased:
+    """
+    Recommender system based on content of item.
+
+    This class contains method for build matrix and compute similarity
+    of each item by its profile.
+
+    Model can handle text, category or nested-category data and transform
+    it into one-hot matrix.
+
+    Class using sklearn.metrics.pairwise.cosine_similarity to compute similarity
+    between items.
+    """
 
     def __init__(self):
         self.n_feartures = 0
@@ -115,9 +127,26 @@ class ContentBased:
 
     @staticmethod
     def cosine_similarity(arr):
+        """Wrapper function of sklearn.metrics.pairwise.cosine_similarity."""
         return cosine_similarity(arr)
 
     def recommend(self, iid, k=10):
+        """
+        Find top N most similar item for input item.
+
+        Function will return top N most similar item and its score.
+
+        Parameters
+        ----------
+        iid: int
+            Input item id for recommendation
+        k: int, default: 10
+            Top N item most similar
+
+        Returns
+        -------
+        Tuple of (item id, score) has the highest correlation with input item.
+        """
         # Check if model not fitted
         if self.simi_matrix.size == 0:
             raise NotImplementedError(f"Model not fit yet")
@@ -131,6 +160,30 @@ class ContentBased:
         return (np.array(item_rec), item_vector[top])
 
     def fit(self, data, config):
+        """
+        Fit data and it's config to compute similarity.
+
+        The similarity matrix is average of all similarity matrix
+        from all features, and it's saved as simi_matrix
+
+        Parameters
+        ----------
+        data: pd.DataFrame
+            Dataframe contains profile of item.
+        config: dict
+            Dictionary contains info about data.
+            It must have struct
+            {
+                "id_col": "id",
+                "text_cols": ["x"],
+                "categorical_cols": ["y"],
+                "list_cols": ["z"]
+            }
+
+        Returns
+        -------
+        None
+        """
         self.item_id = data[config['id_col']]
         self.item_index_map = {v: k for k, v in self.item_id.to_dict().items()}
         self.text_features = config['text_cols']
@@ -162,6 +215,17 @@ class ContentBased:
         print(f"Done train model, total {self.n_feartures} has trained")
 
     def save(self, path):
+        """Dump model to a pickle file for future using.
+
+        Parameters
+        ----------
+        path: str
+            Path string for model saved
+
+        Returns
+        -------
+        None
+        """
         with open(path, "wb") as f:
             pickle.dump(self, f, protocol=pickle.HIGHEST_PROTOCOL)
             f.close()
