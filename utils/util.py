@@ -1,5 +1,7 @@
 import pickle
 from recommend import contentbase # noqa
+from utils import variables
+from sqlalchemy import create_engine
 
 
 def ensure_type_path(path, typefile='csv'):
@@ -68,3 +70,7 @@ def load_model(path):
         model = pickle.load(f)
         f.close()
     return model
+
+
+def get_connection_to_meta():
+    return create_engine(f"sqlite:///{variables.DATABASE}")

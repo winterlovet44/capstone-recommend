@@ -1,28 +1,31 @@
 
 import os
-import pickle
-import numpy as np
-import pandas as pd
-from scipy import sparse
+
+# Cleaned data variables
+DATA_DIR = "data"
+META_FILE = "metadata.json"
+METADATA = os.path.join(DATA_DIR, META_FILE)
+RATING_FILE = "rating.csv"
+RATING = os.path.join(DATA_DIR, RATING_FILE)
+DATABASE = os.path.join(DATA_DIR, "movielens")
+TABLE = "metadata"
+
+# Raw data variables
+RAW_DIR = "raw"  # raw folders
+RAW_META = "movies.dat"  # raw metadata movielens file
+RAW_META_FILE = os.path.join(RAW_DIR, RAW_META)  # path to raw metdata
+RAW_RATING = "ratings.dat"  # raw rating movielens file
+RAW_RATING_FILE = os.path.join(RAW_DIR, RAW_RATING)  # path to rating file
+
+# Model variables
+MODEL_DIR = "models"
+CB_FILE = "cb.pkl"
+CB_MODEL_PATH = os.path.join(MODEL_DIR, CB_FILE)
+ALS_FILE = "als.pkl"
+ALS_MODEL_PATH = os.path.join(MODEL_DIR, ALS_FILE)
+
+# Rating file columns selected
+COLUMNS = ['UserID', "MovieID", "Rating"]
 
 
-DTYPE = np.float32
-
-
-def check_os_environ():
-    """Helper function for check environs configuration."""
-
-    pass
-
-
-def load_model(path):
-    with open(path, "rb") as f:
-        model = pickle.load(f)
-        f.close()
-    return model
-
-def save_model(model, path):
-    with open(path, "wb") as f:
-        model = pickle.dump(model, f, protocol=pickle.HIGHEST_PROTOCOL)
-        f.close()
 

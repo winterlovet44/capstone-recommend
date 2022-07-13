@@ -4,13 +4,15 @@ import numpy as np
 from recommend.dataset import Dataset
 from sqlalchemy import create_engine
 from recommend.contentbase import ContentBased
+from utils.util import get_connection_to_meta
+from utils.variables import RATING, TABLE
 
 
-engine = create_engine("sqlite:///data/metadata")
-RATING_PATH = "data/rating.csv"
+engine = get_connection_to_meta()
+# RATING_PATH = "data/rating.csv"
 
 
-def load_data(path=RATING_PATH):
+def load_data(path=RATING):
     """Load rating dataset to Dataset module.
 
     Parameters
@@ -50,7 +52,7 @@ def get_user_history(user_id, dataset):
 #     return pd.read_sql_query(query, conn)
 
 
-def get_movie_information(iid, sql_engine=engine, table="movielens"):
+def get_movie_information(iid, sql_engine=engine, table=TABLE):
     """
     Load metadata in SQLite database by using pandas.read_sql_query.
 
