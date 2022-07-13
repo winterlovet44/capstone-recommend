@@ -19,7 +19,7 @@ app = Flask(__name__)
 # Global variable
 # load data
 engine = get_connection_to_meta()
-df = load_data()
+# df = load_data()
 history = load_data(variables.RATING)
 
 # load model
