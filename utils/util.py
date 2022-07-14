@@ -8,7 +8,7 @@ def ensure_type_path(path, typefile='csv'):
     """
     Function for check input file path is correct.
     If this file path is not correct with expected type file
-    function will be added typefile at the end of path
+    the function will add typefile at the end of path
 
     Parameter
     path: str
@@ -35,8 +35,9 @@ def ensure_type_path(path, typefile='csv'):
 
 def save_model(model, path):
     """
-    Function for Serialization model.
-    Using for save model as a pickle file.
+    Serialize model object as a pickle file.
+    If function has built-in function for serialization, it will
+    be called. If not, use Pickle.dump to dump model.
 
     Parameter
     model: object
