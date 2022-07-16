@@ -1,13 +1,15 @@
-# Recommendation Web-app
+# Udacity Capstone project - Recommender system
 
+### Motivation
+In this project, i will build a recommender system web-app to make recommendation for user. I recommend for user the items they may like and a recommender system to find out which item is similar to this item.
 ### Table of Contents
 
 1. [Project Description](#motivation)
-2. [Dependencies](#dependencies)
-3. [Installation](#installation)
-4. [File Descriptions](#files)
-5. [Instructions](#results)
-
+2. [Installation](#installation)
+3. [EDA](#EDA)
+4. [Methodology](#method)
+5. [Results](#result)
+6. [Instructions](#results)
 
 
 ## Project Description<a name="motivation"></a>
@@ -24,18 +26,6 @@ This project contains four steps of ML pipeline:
 3. Modelling: Build a Machine learning pipeline to feature engineering and train ML model.
 4. Model serving: Build Flask web app to predict user's input query.
 
-
-
-## Dependencies <a name="dependencies"></a>
-
-To run code in this project, your enviroments need:
-1. [Pandas](https://pandas.pydata.org/)
-2. [Numpy](https://numpy.org/)
-3. [Scikit-learn](https://scikit-learn.org/stable/)
-4. [implicit](https://github.com/benfred/implicit)
-5. [SQLAlchemy](https://sqlalchemy.org/)
-6. [Flask](https://flask.palletsprojects.com/)
-7. [Click](https://click.palletsprojects.com/en/8.1.x/)
 
 
 ## Installation <a name="installation"></a>
