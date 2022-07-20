@@ -9,7 +9,7 @@ In this project, i will build a recommender system web-app to make recommendatio
 3. [EDA](#EDA)
 4. [Methodology](#method)
 5. [Results](#result)
-6. [Instructions](#results)
+6. [Instructions](#instruc)
 
 
 ## Project Description<a name="motivation"></a>
@@ -17,7 +17,7 @@ In this project, i will build a recommender system web-app to make recommendatio
 In this project, I build a application about movie recommender system with Movielens 1M dataset.
 For more information about the dataset, please check [here](https://grouplens.org/datasets/movielens/1m/).
 I use Alternating Least Square which has been implemented in [implicit](https://github.com/benfred/implicit) for user recommendation and a Content-based module for related item recommendation.
-I also implement a simple web-app for perform recommend for an user or an item (model serving).
+I also implement a simple web-app to perform recommendation for the user or the item (model serving).
 
 This project contains four steps of ML pipeline:
 
@@ -38,22 +38,50 @@ pip install -r requirements.txt
 ```
 
 
-## File Descriptions <a name="files"></a>
+## EDA <a name="eda"></a>
 
-```bash
-├───data  # Contains data after cleaned
-├───models  # Contains pickle file, it will be generate after run model
-├───notebooks  # Contains notebook about explore model and serving model
-├───raw  # Raw data of Movielens 1M
-├───recommend  # Contains some module for recommendation
-├───static  # Flask static folder, contains image and css style
-│   ├───images
-│   └───styles
-├───templates  # Flask html folder, use for render
-└───utils  # Contains some helper function for project
-```
+The Movielens 1M dataset contains information about history of user and movie's profile.
+To see the EDA of Movielens 1M, please go to this [notebook](https://github.com/winterlovet44/capstone-recommend/blob/main/notebooks/movielens_ETL_and_EDA.ipynb)
 
-## Instructions<a name="results"></a>
+
+## Methodology <a name="method"></a>
+
+### **Model**
+
+1. Alternating Leasts Squares (ALS): An approach of matrix factorization. this model try to decompose rating matrix into two factos matrix
+2. Content-based (CB): A content based approach use cosine similarity to find most similar item.
+
+With ALS model, i use implementation from [implicit](https://github.com/benfred/implicit) for better performance. With CB model, i implement my own and try to combine multiple of data type.
+My CB implementation can handle multiple of content with data type can be list, category or text. Final similarity of pair items is average of all features input.
+Code of this implementation you can find [here](https://github.com/winterlovet44/capstone-recommend/blob/main/recommend/contentbase.py)
+
+
+### **Metrics**
+
+In this project, i only implement evaluation for ALS. To evaluate ALS, I use 3 metrics: RMSE, MAP@k and P@k.
+
+
+1. RMSE (Root Mean Squares Error): the differences between predicted rating and true rating.
+2. P@k (Precision at k): Precision of recommendation with top k result.
+3. MAP@k (Mean average precision at k): Mean of P@k with all users.
+
+
+## Results<a name="result"></a>
+
+The result of ALS for Movielens 1M. You can view detail at [here](https://github.com/winterlovet44/capstone-recommend/blob/main/notebooks/ALS-experiment.ipynb)
+
+| Factors | RMSE     | MAP@k     | P@k       |
+|---------|----------|-----------|-----------|
+| 10      | 3.21     | 0.10      | 0.206     |
+| 30      | 3.18     | 0.122     | 0.244     |
+| **50**  | **3.18** | **0.128** | **0.246** |
+| 100     | 3.214    | 0.121     | 0.234     |
+ | 300     | 3.42     | 0.087     | 0.171     |
+| 1000    | 3.67     | 0.0364    | 0.0733    |
+
+
+
+## Instructions<a name="instruc"></a>
 
 1. ETL pipeline
 
